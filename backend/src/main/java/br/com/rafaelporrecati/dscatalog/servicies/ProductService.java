@@ -1,7 +1,10 @@
 package br.com.rafaelporrecati.dscatalog.servicies;
 
+import br.com.rafaelporrecati.dscatalog.dto.CategoryDTO;
 import br.com.rafaelporrecati.dscatalog.dto.ProductDTO;
+import br.com.rafaelporrecati.dscatalog.entities.Category;
 import br.com.rafaelporrecati.dscatalog.entities.Product;
+import br.com.rafaelporrecati.dscatalog.repositories.CategoryRepository;
 import br.com.rafaelporrecati.dscatalog.repositories.ProductRepository;
 import br.com.rafaelporrecati.dscatalog.servicies.exceptions.DatabaseException;
 import br.com.rafaelporrecati.dscatalog.servicies.exceptions.ResourceNotFoundException;
@@ -20,10 +23,12 @@ import java.util.Optional;
 public class ProductService {
 
     private ProductRepository productRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository ProductRepository) {
+    public ProductService(ProductRepository ProductRepository, CategoryRepository categoryRepository) {
         this.productRepository = ProductRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true)
@@ -43,17 +48,19 @@ public class ProductService {
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
-//        Product entity = new Product(dto.getName());
+        copyDtoToEntity(dto,entity);
         entity = productRepository.save(entity);
         return new ProductDTO(entity);
     }
+
+
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
         try {
 //            Product entity = productRepository.getOne(id);
             Product entity = productRepository.getOne(id);
-//            entity.setName(dto.getName());
+            copyDtoToEntity(dto,entity);
             productRepository.save(entity);
             return new ProductDTO(entity);
         }catch (EntityNotFoundException e){
@@ -68,6 +75,20 @@ public class ProductService {
             throw new ResourceNotFoundException("Id not found " + id);
         }catch (DataIntegrityViolationException e){
             throw new DatabaseException("Integrity violation");
+        }
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setDate(dto.getDate());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+        for(CategoryDTO catDto : dto.getCategories()){
+            Category category = categoryRepository.getOne(catDto.getId());
+            entity.getCategories().add(category);
         }
     }
 }
