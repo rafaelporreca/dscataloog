@@ -1,6 +1,7 @@
 package br.com.rafaelporrecati.dscatalog.dto;
 
 import br.com.rafaelporrecati.dscatalog.entities.User;
+import br.com.rafaelporrecati.dscatalog.servicies.validation.UserInsertValid;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
