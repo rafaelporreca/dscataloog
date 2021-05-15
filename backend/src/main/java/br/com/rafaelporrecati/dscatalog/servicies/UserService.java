@@ -3,6 +3,7 @@ package br.com.rafaelporrecati.dscatalog.servicies;
 import br.com.rafaelporrecati.dscatalog.dto.RoleDTO;
 import br.com.rafaelporrecati.dscatalog.dto.UserDTO;
 import br.com.rafaelporrecati.dscatalog.dto.UserInsertDTO;
+import br.com.rafaelporrecati.dscatalog.dto.UserUpdateDTO;
 import br.com.rafaelporrecati.dscatalog.entities.Role;
 import br.com.rafaelporrecati.dscatalog.entities.User;
 import br.com.rafaelporrecati.dscatalog.repositories.RoleRepository;
@@ -61,7 +62,7 @@ public class UserService {
 
 
     @Transactional
-    public UserDTO update(Long id, UserDTO dto) {
+    public UserDTO update(Long id, UserUpdateDTO dto) {
         try {
             User entity = userRepository.getOne(id);
             copyDtoToEntity(dto,entity);
