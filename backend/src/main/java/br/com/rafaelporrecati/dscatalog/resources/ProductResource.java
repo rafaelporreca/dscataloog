@@ -1,6 +1,8 @@
 package br.com.rafaelporrecati.dscatalog.resources;
 
+import br.com.rafaelporrecati.dscatalog.dto.FileDTO;
 import br.com.rafaelporrecati.dscatalog.dto.ProductDTO;
+import br.com.rafaelporrecati.dscatalog.dto.UriDTO;
 import br.com.rafaelporrecati.dscatalog.servicies.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -57,5 +60,11 @@ public class ProductResource {
     public ResponseEntity<ProductDTO> delete(@PathVariable Long id){
         productService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<UriDTO> uploadImage(@RequestParam("file") MultipartFile file){
+        UriDTO dto = productService.uploadFile(file);
+        return ResponseEntity.ok().body(dto);
     }
 }

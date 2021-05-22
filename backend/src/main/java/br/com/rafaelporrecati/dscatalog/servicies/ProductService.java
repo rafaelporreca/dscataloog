@@ -2,6 +2,7 @@ package br.com.rafaelporrecati.dscatalog.servicies;
 
 import br.com.rafaelporrecati.dscatalog.dto.CategoryDTO;
 import br.com.rafaelporrecati.dscatalog.dto.ProductDTO;
+import br.com.rafaelporrecati.dscatalog.dto.UriDTO;
 import br.com.rafaelporrecati.dscatalog.entities.Category;
 import br.com.rafaelporrecati.dscatalog.entities.Product;
 import br.com.rafaelporrecati.dscatalog.repositories.CategoryRepository;
@@ -15,8 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +29,13 @@ public class ProductService {
 
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
+    private S3Service s3Service;
 
     @Autowired
-    public ProductService(ProductRepository ProductRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository ProductRepository, CategoryRepository categoryRepository, S3Service s3Service) {
         this.productRepository = ProductRepository;
         this.categoryRepository = categoryRepository;
+        this.s3Service = s3Service;
     }
 
     @Transactional(readOnly = true)
@@ -93,5 +98,10 @@ public class ProductService {
             Category category = categoryRepository.getOne(catDto.getId());
             entity.getCategories().add(category);
         }
+    }
+
+    public UriDTO uploadFile(MultipartFile file) {
+        URL url = s3Service.uploadFile(file);
+        return new UriDTO(url.toString());
     }
 }
