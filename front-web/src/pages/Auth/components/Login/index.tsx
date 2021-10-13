@@ -56,7 +56,7 @@ const Login = () => {
                     <input {...register('password', {required: "Campo obrigatório"})} type="password"
                            className={`form-control input-base ${errors.password ? 'is-invalid' : ''} `}
                            placeholder="Senha"/>
-                    <Link to="/admin/auth/recover" className="login-link-recover">
+                    <Link to="/auth/recover" className="login-link-recover">
                         Esqueci a senha?
                     </Link>
                     {errors.password && (
@@ -68,7 +68,7 @@ const Login = () => {
                 </div>
                 <div className="text-center">
                     <span className="not-registred">Não tem cadastro?</span>
-                    <Link to="/admin/auth/cadastrar" className="login-link-register">CADASTRAR</Link>
+                    <Link to="/auth/cadastrar" className="login-link-register">CADASTRAR</Link>
                 </div>
             </form>
         </AuthCard>
