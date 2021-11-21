@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import './styles.scss'
 import AuthCard from "../Card";
-import {Link, useHistory, useLocation} from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import Buttonicon from "../../../../core/components/Buttonicon";
-import {makeLogin} from "../../../../core/Utils/request";
-import {saveSessionData} from "../../../../core/Utils/auth";
+import { makeLogin } from "../../../../core/Utils/request";
+import { saveSessionData } from "../../../../core/Utils/auth";
 
-type FormData = {
+type FormState = {
     username: string;
     password: string;
 }
@@ -17,12 +17,12 @@ type LocationState = {
 }
 
 const Login = () => {
-    const {register, handleSubmit, formState: { errors }} = useForm<FormData>();
+    const { register, handleSubmit, formState: { errors } } = useForm<FormState>();
     const [hasError, setHasError] = useState(false);
     const history = useHistory();
     const location = useLocation<LocationState>();
     const { from } = location.state || { from: { pathname: "/admin" } };
-    const onSubmit = (data: FormData) => {
+    const onSubmit = (data: FormState) => {
         makeLogin(data)
             .then(response => {
                 setHasError(false);
@@ -42,20 +42,22 @@ const Login = () => {
             </div>)}
             <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
                 <div className="margin-bottom-30">
-                    <input {...register('username', {required: "Campo obrigatório", pattern: {
+                    <input {...register('username', {
+                        required: "Campo obrigatório", pattern: {
                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                             message: "Email inválido"
-                        }})} type="email" className={`form-control input-base ${errors.username ? 'is-invalid' : ''} `}
-                           placeholder="Email"/>
+                        }
+                    })} type="email" className={`form-control input-base ${errors.username ? 'is-invalid' : ''} `}
+                        placeholder="Email" />
                     {errors.username && (
                         <div className="invalid-feedback d-block">{errors.username.message}</div>
                     )}
 
                 </div>
                 <div className="margin-bottom-30">
-                    <input {...register('password', {required: "Campo obrigatório"})} type="password"
-                           className={`form-control input-base ${errors.password ? 'is-invalid' : ''} `}
-                           placeholder="Senha"/>
+                    <input {...register('password', { required: "Campo obrigatório" })} type="password"
+                        className={`form-control input-base ${errors.password ? 'is-invalid' : ''} `}
+                        placeholder="Senha" />
                     <Link to="/auth/recover" className="login-link-recover">
                         Esqueci a senha?
                     </Link>
@@ -64,7 +66,7 @@ const Login = () => {
                     )}
                 </div>
                 <div className="login-submit">
-                    <Buttonicon text="logar"/>
+                    <Buttonicon text="logar" />
                 </div>
                 <div className="text-center">
                     <span className="not-registred">Não tem cadastro?</span>
