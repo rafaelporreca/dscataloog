@@ -23,7 +23,7 @@ const BaseForm = ({title, children}: Props) => {
                     Cancelar
                 </button>
                 <button className="btn btn-primary border-radius-10">
-                    Cadastrar
+                    Salvar
                 </button>
             </div>
         </div>
