@@ -58,7 +58,7 @@ const Form = () => {
     const onSubmit = (data: FormState) => {
         const payload = {
             ...data,
-            imgUrl: uploadedImgUrl
+            imgUrl: uploadedImgUrl || productImgUrl
         }
         makePrivateRequest({ 
             url: isEditing ? `/products/${productId}` : '/products', 
@@ -77,7 +77,7 @@ const Form = () => {
     const onUploadSuccess = (imgUrl: string) => {
         setUploadedImgUrl(imgUrl);
     }
-
+    
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <BaseForm 
