@@ -5,7 +5,6 @@ import Select from 'react-select';
 import { Category } from "core/types/Product";
 import { makeRequest } from "core/Utils/request";
 
-
 type Props = {
     name?: string;
     handleChangeName: (name: string) => void;
